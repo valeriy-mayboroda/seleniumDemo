@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Selenium tests">
+    <test name="Tag tests">
+        <classes>
+            <class name="tests.TagsTests"/>
+        </classes>
+    </test>
+</suite>

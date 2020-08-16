@@ -1,25 +1,19 @@
 package tests;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import io.qameta.allure.Step;
 import org.testng.annotations.BeforeSuite;
 
-import java.util.concurrent.TimeUnit;
-
-import static com.codeborne.selenide.Configuration.baseUrl;
 import static com.codeborne.selenide.Configuration.browser;
-import static com.codeborne.selenide.Configuration.browserSize;
-import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
+import static com.codeborne.selenide.Selenide.open;
 
-public class BaseTest {
+public abstract class BaseTest {
     @BeforeSuite
     public void initDriver() {
-        browserSize = "1280x1080";
-        browser = "chrome";
-        ChromeOptions options = new ChromeOptions();
-        WebDriver driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        setWebDriver(driver);
+        browser = DriverInstance.class.getName();
+    }
+
+    @Step("Open url")
+    public void openUrl(String url) {
+        open(url);
     }
 }

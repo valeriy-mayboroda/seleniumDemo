@@ -14,36 +14,36 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class HomePage extends BasePage {
-    private String selectTag = "//a[contains(@class, 'tag-pill')][text() = '%s']";
-    private By allItemTagList = By.cssSelector("ul.tag-list");
-    private By itemTags = By.tagName("li");
-    private By tagFeed = By.cssSelector("li[ng-show]");
+    private String selectTagFeed = "//a[contains(@class, 'tag-pill')][text() = '%s']";
+    private By feed = By.cssSelector("li[ng-show]");
+    private By articleTagList = By.cssSelector("ul.tag-list");
+    private By articleTags = By.tagName("li");
+
+    @Step("Select tag feed on popular tag menu")
+    public HomePage selectTagFeedOnPopularTagMenu(String name) {
+        $(By.xpath(String.format(selectTagFeed, name))).click();
+        getLogger().info(String.format("Tag %s is selected on popular tags menu", name));
+        return this;
+    }
 
     @Step("Check presence '{0}' feed ")
     public HomePage checkPresenceTagFeed(String tag) {
-        $$(tagFeed).shouldHave(CollectionCondition.size(1))
+        $$(feed).shouldHave(CollectionCondition.size(1))
                 .first().$(withText(tag)).shouldBe(Condition.visible);
         getLogger().info(String.format("Tag feed #%s is presence", tag));
         return this;
     }
 
-    @Step("Select tag feed on popular tag menu")
-    public HomePage selectTagFeedOnPopularTagMenu(String name) {
-        $(By.xpath(String.format(selectTag, name))).click();
-        getLogger().info(String.format("Tag %s is selected on popular tags menu", name));
-        return this;
-    }
-
     @Step("Check tag presence in every result article")
-    public HomePage checkTagPresenceInAllArticles(String name) {
-        //Find all articles
+    public HomePage checkTagPresenceInEveryArticle(String name) {
+        //All articles on page should have tag list
         int expectedArticleSize = 10;
-        List <SelenideElement> results = $$(allItemTagList).shouldHave(CollectionCondition.size(expectedArticleSize));
+        List <SelenideElement> articles = $$(articleTagList).shouldHave(CollectionCondition.size(expectedArticleSize));
         getLogger().info(String.format("%d articles are found on feed", expectedArticleSize));
-        //Find tags in every articles
-        results.forEach(item -> {
+        //Find tags in every article
+        articles.forEach(item -> {
             //Every article should have tags
-            List<SelenideElement> list = item.$$(itemTags).shouldHave(CollectionCondition.sizeGreaterThan(0));
+            List<SelenideElement> list = item.$$(articleTags).shouldHave(CollectionCondition.sizeGreaterThan(0));
             //Check tag {name} presence in article tags
             boolean mustBe = false;
             for (int i = 0; i < list.size(); i ++) {

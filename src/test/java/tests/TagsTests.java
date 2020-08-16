@@ -11,7 +11,8 @@ public class TagsTests {
     public void checkTagPresenceInAllArticles(){
         open("https://demo.realworld.io/");
         new HomePage()
-                .filterByTag("test")
+                .selectTagFeedOnPopularTagMenu("test")
+                .checkPresenceTagFeed("test")
                 .checkTagPresenceInAllArticles("test");
     }
 }
